@@ -13,6 +13,7 @@ export function App() {
   const { data: paginatedTransactions, ...paginatedTransactionsUtils } = usePaginatedTransactions()
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } = useTransactionsByEmployee()
   const [isLoading, setIsLoading] = useState(false)
+  const [isEmployee, setIsEmployee] = useState(false);
 
   const transactions = useMemo(
     () => paginatedTransactions?.data ?? transactionsByEmployee ?? null,
@@ -26,13 +27,15 @@ export function App() {
     await employeeUtils.fetchAll()
     setIsLoading(false);
     await paginatedTransactionsUtils.fetchAll()
+    setIsEmployee(false);
 
   }, [employeeUtils, paginatedTransactionsUtils, transactionsByEmployeeUtils])
 
   const loadTransactionsByEmployee = useCallback(
     async (employeeId: string) => {
-      paginatedTransactionsUtils.invalidateData()
-      await transactionsByEmployeeUtils.fetchById(employeeId)
+      paginatedTransactionsUtils.invalidateData();
+      await transactionsByEmployeeUtils.fetchById(employeeId);
+      setIsEmployee(true);
     },
     [paginatedTransactionsUtils, transactionsByEmployeeUtils]
   )
@@ -77,7 +80,7 @@ export function App() {
         <div className="RampGrid">
           <Transactions transactions={transactions} />
 
-          {transactions !== null && (
+          {transactions !== null && !isEmployee && paginatedTransactions?.nextPage!==null && (
             <button
               className="RampButton"
               disabled={paginatedTransactionsUtils.loading}
