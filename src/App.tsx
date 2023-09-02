@@ -42,7 +42,6 @@ export function App() {
       loadAllTransactions()
     }
   }, [employeeUtils.loading, employees, loadAllTransactions])
-
   return (
     <Fragment>
       <main className="MainContainer">
@@ -64,7 +63,10 @@ export function App() {
             if (newValue === null) {
               return
             }
-
+            if(newValue.firstName === "All"){
+              await loadAllTransactions();
+              return;
+            }
             await loadTransactionsByEmployee(newValue.id)
           }}
         />
