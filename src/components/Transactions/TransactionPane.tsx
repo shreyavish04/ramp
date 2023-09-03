@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import { useState } from "react"
+import { AppContext } from "src/utils/context";
 import { InputCheckbox } from "../InputCheckbox"
 import { TransactionPaneComponent } from "./types"
 
@@ -7,7 +9,14 @@ export const TransactionPane: TransactionPaneComponent = ({
   loading,
   setTransactionApproval: consumerSetTransactionApproval,
 }) => {
-  const [approved, setApproved] = useState(transaction.approved)
+  const [approved, setApproved] = useState(transaction.approved);
+  const { cache } = useContext(AppContext)
+  const clearCache = () => {
+    if (cache?.current === undefined) {
+      return
+    }
+    cache.current = new Map<string, string>()
+  }
   return (
     <div className="RampPane">
       <div className="RampPane--content">
@@ -26,7 +35,8 @@ export const TransactionPane: TransactionPaneComponent = ({
             transactionId: transaction.id,
             newValue,
           })
-          setApproved(newValue)
+          clearCache();
+          setApproved(newValue);
         }}
       />
     </div>

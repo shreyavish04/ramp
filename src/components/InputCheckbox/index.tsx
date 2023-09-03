@@ -15,6 +15,7 @@ export const InputCheckbox: InputCheckboxComponent = ({ id, checked = false, dis
         })}
         onClick={() => {
           setCheck(!check);
+          onChange(!check);
         }}
       />
       <input

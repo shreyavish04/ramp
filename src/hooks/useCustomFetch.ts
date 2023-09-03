@@ -15,7 +15,6 @@ export function useCustomFetch() {
       wrappedRequest<TData>(async () => {
         const cacheKey = getCacheKey(endpoint, params)
         const cacheResponse = cache?.current.get(cacheKey)
-
         if (cacheResponse) {
           const data = JSON.parse(cacheResponse)
           return data as Promise<TData>
